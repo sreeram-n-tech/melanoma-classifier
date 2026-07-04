@@ -1,0 +1,17 @@
+{
+  "labels_csv": "data\\external\\ph2\\labels.csv",
+  "n": 200,
+  "n_pos": 40,
+  "tta": true,
+  "at_frozen_threshold": {
+    "auc": 0.88453125,
+    "sensitivity": 0.95,
+    "specificity": 0.4625
+  },
+  "at_default_0.5": {
+    "auc": 0.88453125,
+    "sensitivity": 0.8,
+    "specificity": 0.7875
+  },
+  "internal_test_auc": 0.8986004164418743
+}

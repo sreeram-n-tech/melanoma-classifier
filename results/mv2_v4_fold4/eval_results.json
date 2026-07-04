@@ -1,0 +1,8 @@
+{
+  "checkpoint": "G:\\srip\\model_output\\mv2_v4_fold4\\best_model.pt",
+  "auc": 0.8965583271042699,
+  "tuned_threshold": 0.12555843591690063,
+  "threshold_method": "target_sensitivity>=0.95",
+  "sensitivity": 0.9512195121951219,
+  "specificity": 0.5624290578887627
+}

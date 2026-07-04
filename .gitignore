@@ -1,0 +1,51 @@
+# ── Data (get HAM10000 from Kaggle — see README) ──────────────────────────
+data/
+
+# ── Model weights & training output (2.6 GB of checkpoints) ───────────────
+# Curated metrics/summaries are committed under results/ instead.
+model_output/
+*.pt
+*.pth
+*.ckpt
+*.h5
+*.keras
+*.pkl
+*.onnx
+
+# ── Generated output: Grad-CAM overlays, QC panels, inspection dumps ──────
+gradcam_augment/
+gradcam_backbone/
+gradcam_mechanistic/
+border_inspect/
+augment_qc/
+vignette_check/
+preprocessing_check/
+ruler_validation/
+results_learning_curve/
+ruler_flagged.txt
+
+# ── Logs ──────────────────────────────────────────────────────────────────
+run_logs/
+run_log.txt
+run_augment_log.txt
+run_backbone_log.txt
+*.log
+
+# ── Python junk ───────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# ── Virtual environments ──────────────────────────────────────────────────
+venv/
+.venv/
+env/
+
+# ── Editor / OS / local tooling ───────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.claude/settings.local.json

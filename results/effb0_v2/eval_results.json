@@ -1,0 +1,8 @@
+{
+  "checkpoint": "model_output/effb0_v2/best_model.pt",
+  "auc": 0.8912837021415101,
+  "tuned_threshold": 0.007093878462910652,
+  "threshold_method": "target_sensitivity>=0.95",
+  "sensitivity": 0.9520958083832335,
+  "specificity": 0.5182427401340283
+}

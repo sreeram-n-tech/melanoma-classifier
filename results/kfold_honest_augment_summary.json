@@ -1,0 +1,67 @@
+{
+  "arm": "augment",
+  "preprocessing": "off",
+  "folds": [
+    {
+      "fold": 0,
+      "T": 1.7852709293365479,
+      "frozen_threshold": 0.35835644602775574,
+      "threshold_method": "target_sensitivity>=0.95",
+      "achieved_sensitivity": 0.926605504587156,
+      "achieved_specificity": 0.6492997198879552,
+      "auc": 0.8917097114074988,
+      "n_inner_val": 1614,
+      "n_held_out": 2003
+    },
+    {
+      "fold": 1,
+      "T": 1.4876198768615723,
+      "frozen_threshold": 0.29608073830604553,
+      "threshold_method": "target_sensitivity>=0.95",
+      "achieved_sensitivity": 0.9295774647887324,
+      "achieved_specificity": 0.6068376068376068,
+      "auc": 0.8956194909246553,
+      "n_inner_val": 1598,
+      "n_held_out": 1968
+    },
+    {
+      "fold": 2,
+      "T": 1.8822896480560303,
+      "frozen_threshold": 0.259824275970459,
+      "threshold_method": "target_sensitivity>=0.95",
+      "achieved_sensitivity": 0.9295154185022027,
+      "achieved_specificity": 0.5957565605806812,
+      "auc": 0.8875532828115122,
+      "n_inner_val": 1612,
+      "n_held_out": 2018
+    },
+    {
+      "fold": 3,
+      "T": 1.425217628479004,
+      "frozen_threshold": 0.11438643932342529,
+      "threshold_method": "target_sensitivity>=0.95",
+      "achieved_sensitivity": 0.9712918660287081,
+      "achieved_specificity": 0.6699834162520729,
+      "auc": 0.9110851907395505,
+      "n_inner_val": 1634,
+      "n_held_out": 2018
+    },
+    {
+      "fold": 4,
+      "T": 1.6370391845703125,
+      "frozen_threshold": 0.1640734225511551,
+      "threshold_method": "target_sensitivity>=0.95",
+      "achieved_sensitivity": 0.9471544715447154,
+      "achieved_specificity": 0.6532349602724177,
+      "auc": 0.9055281784372895,
+      "n_inner_val": 1610,
+      "n_held_out": 2008
+    }
+  ],
+  "mean_sensitivity": 0.9408289450903029,
+  "std_sensitivity": 0.016881349410564548,
+  "mean_specificity": 0.6350224527661468,
+  "std_specificity": 0.028614683584250424,
+  "mean_auc": 0.8982991708641013,
+  "std_auc": 0.008738611163056161
+}

@@ -1,0 +1,50 @@
+{
+  "per_fold": [
+    {
+      "checkpoint": "C:\\Users\\Sree Ram\\OneDrive\\Desktop\\srip\\melanoma_training_core_pytorch (1)\\melanoma-core\\model_output\\mobilenet_v2_weighted_ce_off_unfreeze19_fold0\\best_model.pt",
+      "auc": 0.9029064836943952,
+      "tuned_threshold": 0.23411783576011658,
+      "threshold_method": "target_sensitivity>=0.95",
+      "sensitivity": 0.9541284403669725,
+      "specificity": 0.626890756302521
+    },
+    {
+      "checkpoint": "C:\\Users\\Sree Ram\\OneDrive\\Desktop\\srip\\melanoma_training_core_pytorch (1)\\melanoma-core\\model_output\\mobilenet_v2_weighted_ce_off_unfreeze19_fold1\\best_model.pt",
+      "auc": 0.9140858446022765,
+      "tuned_threshold": 0.10944216698408127,
+      "threshold_method": "target_sensitivity>=0.95",
+      "sensitivity": 0.9530516431924883,
+      "specificity": 0.6717948717948717
+    },
+    {
+      "checkpoint": "C:\\Users\\Sree Ram\\OneDrive\\Desktop\\srip\\melanoma_training_core_pytorch (1)\\melanoma-core\\model_output\\mobilenet_v2_weighted_ce_off_unfreeze19_fold2\\best_model.pt",
+      "auc": 0.8986931721751193,
+      "tuned_threshold": 0.22741815447807312,
+      "threshold_method": "target_sensitivity>=0.95",
+      "sensitivity": 0.9515418502202643,
+      "specificity": 0.6147403685092128
+    },
+    {
+      "checkpoint": "C:\\Users\\Sree Ram\\OneDrive\\Desktop\\srip\\melanoma_training_core_pytorch (1)\\melanoma-core\\model_output\\mobilenet_v2_weighted_ce_off_unfreeze19_fold3\\best_model.pt",
+      "auc": 0.9122568973315242,
+      "tuned_threshold": 0.050021275877952576,
+      "threshold_method": "target_sensitivity>=0.95",
+      "sensitivity": 0.9521531100478469,
+      "specificity": 0.6329463792150359
+    },
+    {
+      "checkpoint": "C:\\Users\\Sree Ram\\OneDrive\\Desktop\\srip\\melanoma_training_core_pytorch (1)\\melanoma-core\\model_output\\mobilenet_v2_weighted_ce_off_unfreeze19_fold4\\best_model.pt",
+      "auc": 0.9024528667534122,
+      "tuned_threshold": 0.05373551324009895,
+      "threshold_method": "target_sensitivity>=0.95",
+      "sensitivity": 0.9512195121951219,
+      "specificity": 0.5908059023836549
+    }
+  ],
+  "mean_auc": 0.9060790529113454,
+  "std_auc": 0.006000668806057845,
+  "mean_sensitivity": 0.9524189112045388,
+  "std_sensitivity": 0.0010584218378899247,
+  "mean_specificity": 0.6274356556410592,
+  "std_specificity": 0.026462479802304734
+}

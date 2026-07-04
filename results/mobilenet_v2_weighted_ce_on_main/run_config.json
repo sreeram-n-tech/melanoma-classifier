@@ -1,0 +1,16 @@
+{
+  "arch": "mobilenet_v2",
+  "loss": "weighted_ce",
+  "preprocessing": "on",
+  "task_mode": "binary",
+  "fold": null,
+  "n_folds": 5,
+  "epochs_stage1": 5,
+  "epochs_stage2": 10,
+  "unfreeze_blocks": 3,
+  "lr_stage1": 0.001,
+  "lr_stage2": 0.0001,
+  "batch_size": 32,
+  "seed": 42,
+  "resume": false
+}

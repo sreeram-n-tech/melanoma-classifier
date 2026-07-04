@@ -1,0 +1,50 @@
+{
+  "per_fold": [
+    {
+      "checkpoint": "G:\\srip\\model_output\\mv2_v4_fold0\\best_model.pt",
+      "auc": 0.9106082800092512,
+      "tuned_threshold": 0.18185000121593475,
+      "threshold_method": "target_sensitivity>=0.95",
+      "sensitivity": 0.9541284403669725,
+      "specificity": 0.6095238095238096
+    },
+    {
+      "checkpoint": "G:\\srip\\model_output\\mv2_v4_fold1\\best_model.pt",
+      "auc": 0.9019354493532897,
+      "tuned_threshold": 0.18945863842964172,
+      "threshold_method": "target_sensitivity>=0.95",
+      "sensitivity": 0.9530516431924883,
+      "specificity": 0.6222222222222222
+    },
+    {
+      "checkpoint": "G:\\srip\\model_output\\mv2_v4_fold2\\best_model.pt",
+      "auc": 0.9007150288889382,
+      "tuned_threshold": 0.10501404851675034,
+      "threshold_method": "target_sensitivity>=0.95",
+      "sensitivity": 0.9515418502202643,
+      "specificity": 0.5388051367950866
+    },
+    {
+      "checkpoint": "G:\\srip\\model_output\\mv2_v4_fold3\\best_model.pt",
+      "auc": 0.9097918170973944,
+      "tuned_threshold": 0.2258184552192688,
+      "threshold_method": "target_sensitivity>=0.95",
+      "sensitivity": 0.9521531100478469,
+      "specificity": 0.6373687119955777
+    },
+    {
+      "checkpoint": "G:\\srip\\model_output\\mv2_v4_fold4\\best_model.pt",
+      "auc": 0.8965583271042699,
+      "tuned_threshold": 0.12555843591690063,
+      "threshold_method": "target_sensitivity>=0.95",
+      "sensitivity": 0.9512195121951219,
+      "specificity": 0.5624290578887627
+    }
+  ],
+  "mean_auc": 0.9039217804906287,
+  "std_auc": 0.005433522219932394,
+  "mean_sensitivity": 0.9524189112045388,
+  "std_sensitivity": 0.0010584218378899247,
+  "mean_specificity": 0.5940697876850918,
+  "std_specificity": 0.0373135381003802
+}

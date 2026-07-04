@@ -1,0 +1,16 @@
+{
+  "checkpoints": [
+    "model_output/mobilenet_v2_weighted_ce_off_unfreeze19_main/best_model.pt"
+  ],
+  "ensemble": false,
+  "tta": false,
+  "preprocessing": "off",
+  "img_size": 224,
+  "temperature": 1.4502559900283813,
+  "threshold": 0.15626126527786255,
+  "threshold_source": "validation",
+  "threshold_method": "target_sensitivity>=0.95",
+  "test_auc": 0.8829905341959418,
+  "test_sensitivity": 0.8862275449101796,
+  "test_specificity": 0.6314221891288161
+}

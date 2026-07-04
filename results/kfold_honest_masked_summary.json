@@ -1,0 +1,67 @@
+{
+  "arm": "masked",
+  "preprocessing": "devig_ruler",
+  "folds": [
+    {
+      "fold": 0,
+      "T": 1.7344573736190796,
+      "frozen_threshold": 0.13390609622001648,
+      "threshold_method": "target_sensitivity>=0.95",
+      "achieved_sensitivity": 0.9495412844036697,
+      "achieved_specificity": 0.6476190476190476,
+      "auc": 0.9004008943026752,
+      "n_inner_val": 1614,
+      "n_held_out": 2003
+    },
+    {
+      "fold": 1,
+      "T": 1.8941859006881714,
+      "frozen_threshold": 0.23901021480560303,
+      "threshold_method": "target_sensitivity>=0.95",
+      "achieved_sensitivity": 0.9436619718309859,
+      "achieved_specificity": 0.5908831908831909,
+      "auc": 0.9045115899575994,
+      "n_inner_val": 1598,
+      "n_held_out": 1968
+    },
+    {
+      "fold": 2,
+      "T": 1.5621559619903564,
+      "frozen_threshold": 0.1577659249305725,
+      "threshold_method": "target_sensitivity>=0.95",
+      "achieved_sensitivity": 0.933920704845815,
+      "achieved_specificity": 0.626465661641541,
+      "auc": 0.8906303421168495,
+      "n_inner_val": 1612,
+      "n_held_out": 2018
+    },
+    {
+      "fold": 3,
+      "T": 2.1103532314300537,
+      "frozen_threshold": 0.22175349295139313,
+      "threshold_method": "target_sensitivity>=0.95",
+      "achieved_sensitivity": 0.9617224880382775,
+      "achieved_specificity": 0.6533996683250415,
+      "auc": 0.9211385919948372,
+      "n_inner_val": 1634,
+      "n_held_out": 2018
+    },
+    {
+      "fold": 4,
+      "T": 1.7074618339538574,
+      "frozen_threshold": 0.3554938733577728,
+      "threshold_method": "target_sensitivity>=0.95",
+      "achieved_sensitivity": 0.9024390243902439,
+      "achieved_specificity": 0.7162315550510783,
+      "auc": 0.9101446065538976,
+      "n_inner_val": 1610,
+      "n_held_out": 2008
+    }
+  ],
+  "mean_sensitivity": 0.9382570947017983,
+  "std_sensitivity": 0.020044494287817027,
+  "mean_specificity": 0.6469198247039799,
+  "std_specificity": 0.04100017162475612,
+  "mean_auc": 0.9053652049851717,
+  "std_auc": 0.010140331750270577
+}

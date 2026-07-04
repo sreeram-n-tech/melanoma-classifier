@@ -1,0 +1,16 @@
+{
+  "checkpoints": [
+    "model_output/effb0_unfreeze19_main/best_model.pt"
+  ],
+  "ensemble": false,
+  "tta": true,
+  "preprocessing": "off",
+  "img_size": 224,
+  "temperature": 1.8930615186691284,
+  "threshold": 0.1941014677286148,
+  "threshold_source": "validation",
+  "threshold_method": "target_sensitivity>=0.95",
+  "test_auc": 0.8986004164418743,
+  "test_sensitivity": 0.9520958083832335,
+  "test_specificity": 0.5867460908413998
+}

@@ -1,0 +1,8 @@
+{
+  "checkpoint": "model_output\\mobilenet_v2_weighted_ce_off_unfreeze12_main\\best_model.pt",
+  "auc": 0.8810197921357583,
+  "tuned_threshold": 0.05819006636738777,
+  "threshold_method": "target_sensitivity>=0.95",
+  "sensitivity": 0.9520958083832335,
+  "specificity": 0.5495160089352197
+}

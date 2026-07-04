@@ -1,0 +1,8 @@
+{
+  "checkpoint": "C:\\Users\\Sree Ram\\OneDrive\\Desktop\\srip\\melanoma_training_core_pytorch (1)\\melanoma-core\\model_output\\mobilenet_v2_weighted_ce_off_unfreeze19_fold4\\best_model.pt",
+  "auc": 0.9024528667534122,
+  "tuned_threshold": 0.05373551324009895,
+  "threshold_method": "target_sensitivity>=0.95",
+  "sensitivity": 0.9512195121951219,
+  "specificity": 0.5908059023836549
+}

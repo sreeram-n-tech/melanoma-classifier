@@ -1,0 +1,8 @@
+{
+  "checkpoint": "G:\\srip\\model_output\\effb0_cosine10_fold2\\best_model.pt",
+  "auc": 0.903066482682625,
+  "tuned_threshold": 0.04468204826116562,
+  "threshold_method": "target_sensitivity>=0.95",
+  "sensitivity": 0.9559471365638766,
+  "specificity": 0.5756560580681184
+}

@@ -1,0 +1,16 @@
+{
+  "checkpoints": [
+    "model_output/mv2_recipe_v2/best_model.pt"
+  ],
+  "ensemble": false,
+  "tta": false,
+  "preprocessing": "off",
+  "img_size": 224,
+  "temperature": 0.7804867029190063,
+  "threshold": 0.277286171913147,
+  "threshold_source": "validation",
+  "threshold_method": "target_sensitivity>=0.95",
+  "test_auc": 0.8710055689068624,
+  "test_sensitivity": 0.8562874251497006,
+  "test_specificity": 0.6656738644825019
+}

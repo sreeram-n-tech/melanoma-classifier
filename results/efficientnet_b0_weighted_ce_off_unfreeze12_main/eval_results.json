@@ -1,0 +1,8 @@
+{
+  "checkpoint": "model_output\\efficientnet_b0_weighted_ce_off_unfreeze12_main\\best_model.pt",
+  "auc": 0.8876944547242076,
+  "tuned_threshold": 0.1394575983285904,
+  "threshold_method": "target_sensitivity>=0.95",
+  "sensitivity": 0.9520958083832335,
+  "specificity": 0.5398361876396128
+}

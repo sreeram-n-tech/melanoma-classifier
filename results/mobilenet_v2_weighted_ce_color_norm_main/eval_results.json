@@ -1,0 +1,8 @@
+{
+  "checkpoint": "model_output\\mobilenet_v2_weighted_ce_color_norm_main\\best_model.pt",
+  "auc": 0.8299989745007379,
+  "tuned_threshold": 0.08579105883836746,
+  "threshold_method": "target_sensitivity>=0.95",
+  "sensitivity": 0.9520958083832335,
+  "specificity": 0.47058823529411764
+}

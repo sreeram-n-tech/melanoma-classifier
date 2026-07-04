@@ -1,0 +1,8 @@
+{
+  "checkpoint": "model_output/effb0_cosine10/best_model.pt",
+  "auc": 0.9012265862913043,
+  "tuned_threshold": 0.08700442314147949,
+  "threshold_method": "target_sensitivity>=0.95",
+  "sensitivity": 0.9520958083832335,
+  "specificity": 0.5994043186895012
+}
