@@ -101,6 +101,19 @@ python run_leakage_study.py
 
 See **[HOW_TO_RUN.md](HOW_TO_RUN.md)** for the full step-by-step walkthrough.
 
+### Try the demo
+
+A small FastAPI web app wraps the classifier (upload a lesion image → calibrated
+probability + Grad-CAM). Weights aren't in the repo, so drop a `best_model.pt`
+into `webapp/models/effb0/` first, then:
+
+```bash
+pip install -r webapp/requirements.txt
+uvicorn webapp.app:app --reload      # open http://127.0.0.1:8000/
+```
+
+See **[webapp/README.md](webapp/README.md)** for details.
+
 ## Project structure
 
 ```
@@ -109,6 +122,7 @@ preprocessing/            Devignette + ruler-masking transforms
 experiments/              Experiment runners + frozen CV split definitions
   honest_splits/          The 5 frozen fold definitions (reproducibility)
 results/                  Committed metrics & summaries (JSON/CSV) — weights excluded
+webapp/                   FastAPI demo app (code only; model weights excluded)
 
 finalize.py               Freeze threshold + temperature-calibrate → deploy.json
 compare_roc.py            ROC / spec-at-sensitivity with bootstrap CIs
