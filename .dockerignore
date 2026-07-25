@@ -1,0 +1,18 @@
+# Keep the build context (and image) small. None of this is needed to serve.
+.git/
+data/
+model_output/
+gradcam_*/
+augment_qc/
+border_inspect/
+vignette_check/
+run_logs/
+results/
+experiments/
+reports/
+research papers/
+**/__pycache__/
+*.pyc
+*.docx
+*.pdf
+*.pptx
