@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Melanoma Classifier — Research Demonstration</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+  <div class="disclaimer" role="note">
+    <strong>Research/educational demonstration only.</strong>
+    Not a medical device, not for diagnosis, and not a substitute for a dermatologist.
+    If you have a real concern about a skin lesion, see a doctor.
+  </div>
+
+  <header class="site-nav">
+    <div class="nav-inner">
+      <span class="wordmark">Melanoma Classifier</span>
+      <nav class="nav-links">
+        <a href="#about">Methodology</a>
+        <a href="#instrument">Instrument</a>
+      </nav>
+      <span class="tag">not a medical device</span>
+    </div>
+  </header>
+
+  <section class="hero">
+    <img class="hero-bg" src="/static/img/hero-dermoscopy.jpg" alt="" />
+    <div class="hero-scrim"></div>
+    <div class="hero-content">
+      <span class="eyebrow">Computational Dermatology</span>
+      <h1>Melanoma —<br />Reading the Skin</h1>
+      <p class="hero-sub">
+        A research demonstration of calibrated deep-learning models for dermoscopic
+        assessment — real numbers, honestly reported, never a diagnosis.
+      </p>
+      <a class="hero-scroll" href="#about"><span class="hero-scroll-line"></span>Scroll to explore the instrument</a>
+    </div>
+    <span class="hero-credit mono">HAM10000 · ISIC_0033848 · dermoscopy sample</span>
+  </section>
+
+  <section class="about" id="about">
+    <div class="wrap">
+      <div class="about-grid">
+        <div class="about-copy">
+          <h2>Dermoscopy &amp; Models</h2>
+          <p>
+            Dermoscopy reveals sub-surface pigment structures invisible to the naked eye.
+            This instrument runs those close-up images through a deep-learning model whose
+            probability output was calibrated, and whose referral threshold was frozen, on a
+            held-out split it never trained on — the same discipline a lab applies to any
+            measurement instrument before trusting its readout.
+          </p>
+          <div class="callout">
+            <h3>Transparency &amp; Honesty</h3>
+            <p>
+              The probability shown is the model's <strong>calibrated estimate</strong> that
+              the image resembles melanoma. It is not a diagnosis, involves no physical exam,
+              and should never replace a dermatologist.
+            </p>
+            <p class="callout-quote">
+              "The referral threshold isn't a 50/50 guess — it's deliberately set low to catch
+              more true melanomas, at the cost of more false alarms."
+            </p>
+          </div>
+        </div>
+
+        <div class="about-panel">
+          <div class="calib-diagram" aria-hidden="true">
+            <div class="calib-diagram-track">
+              <span class="calib-diagram-region below" style="width: {{ '%.1f'|format(primary.threshold * 100) }}%"></span>
+              <span class="calib-diagram-region above" style="left: {{ '%.1f'|format(primary.threshold * 100) }}%"></span>
+              <span class="calib-diagram-gate" style="left: {{ '%.1f'|format(primary.threshold * 100) }}%">
+                <span class="calib-diagram-gate-label mono">{{ '%.3f'|format(primary.threshold) }} THRESHOLD</span>
+              </span>
+            </div>
+            <div class="calib-diagram-scale"><span>0.00</span><span>1.00</span></div>
+          </div>
+          <p class="calib-diagram-caption">No reading shown here — this scale illustrates only the frozen threshold, not a live estimate.</p>
+
+          <div class="about-facts">
+            <div class="about-fact">
+              <span class="fact-label">Threshold Calibration</span>
+              <p>{{ primary.display_name }} is calibrated to a referral threshold of
+                <span class="mono">{{ '%.3f'|format(primary.threshold) }}</span>, tuned on held-out
+                data to prioritize catching true positives.</p>
+            </div>
+            <div class="about-fact">
+              <span class="fact-label">Operating Points</span>
+              <p>Only frozen, calibrated models are offered below. Architectures without a
+                completed calibration pass are excluded rather than shown uncalibrated.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="instrument" id="instrument">
+    <div class="wrap">
+      <div class="instrument-head">
+        <span class="version-tag mono">Workbench — local instance</span>
+        <h2>Precision Analysis Bench</h2>
+        <p class="instrument-sub">Upload a dermoscopy image to generate a calibrated reading from a frozen, honestly evaluated model.</p>
+      </div>
+
+      <div class="bench-grid">
+        <div class="pane pane-controls">
+          <div class="card">
+            <span class="bench-step-label">01 — Specimen Input</span>
+            <label class="field" for="file">Dermoscopy image</label>
+            <input id="file" type="file" accept="image/*" />
+            <p class="note">
+              Expects <strong>dermoscopy</strong> images (dermatoscope close-ups). Ordinary phone
+              photos will give unreliable results — these models were trained only on dermoscopy.
+            </p>
+
+            <span class="bench-step-label">02 — Model Selection</span>
+            <label class="field" for="model">Model</label>
+            <select id="model">
+              {% for m in models %}
+              <option value="{{ m.key }}">{{ m.display_name }} — {{ m.subtitle }}</option>
+              {% endfor %}
+            </select>
+
+            <div class="field-group">
+              <label class="toggle">
+                <input type="checkbox" id="compare-mode" />
+                <span>Compare both models side by side</span>
+              </label>
+              <p class="note">
+                Runs the same input through both models independently and shows each one's own
+                reading — they are never averaged or combined into a single score.
+              </p>
+            </div>
+
+            <span class="bench-step-label">03 — Preprocessing (optional)</span>
+            <div class="field-group">
+              <p class="note">
+                Every model here was trained on <strong>raw</strong> images. Turning any of
+                these on makes the input off-distribution — the reading will be marked
+                <strong>provisional</strong>, not backed by the reported AUC.
+              </p>
+              <ul class="toggle-list">
+                {% for step in preprocess_steps %}
+                <li class="toggle-item">
+                  <label class="toggle">
+                    <input type="checkbox" class="preproc-toggle" value="{{ step.key }}" />
+                    <span>{{ step.label }}</span>
+                  </label>
+                  {% if step.warning %}<p class="note warn">{{ step.warning }}</p>{% endif %}
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+
+            <button id="run" disabled>Run reading</button>
+            <div id="err" class="err" role="alert"></div>
+          </div>
+        </div>
+
+        <div class="pane pane-reading">
+          <div class="card" id="empty-state">
+            <span class="panel-eyebrow">Reading</span>
+            <p class="note">
+              Upload a dermoscopy image and choose a model, then run a reading to see its
+              calibrated probability on the readout below.
+            </p>
+          </div>
+
+          <div class="card" id="result" hidden aria-live="polite">
+            <div class="panel-head">
+              <span class="panel-eyebrow">Calibrated Readout</span>
+              <span class="badge provisional" id="provisional-badge" hidden>
+                PROVISIONAL — off-distribution input
+              </span>
+            </div>
+
+            <div class="before-after" id="before-after" hidden>
+              <div class="ba-pane">
+                <span class="ba-label">Before</span>
+                <img id="ba-before" alt="Original uploaded image" />
+              </div>
+              <div class="ba-pane">
+                <span class="ba-label">After preprocessing</span>
+                <img id="ba-after" alt="Image after the selected preprocessing steps" />
+              </div>
+            </div>
+
+            <div class="prob mono" id="prob">—</div>
+            <div id="flag" class="flag"></div>
+
+            <p class="note caveat" id="off-dist-caveat" hidden>
+              This model was trained on <strong>raw</strong> images. With preprocessing
+              applied, this input is off-distribution — treat this estimate as
+              <strong>illustrative</strong>; it is <strong>not</strong> backed by the
+              reported AUC.
+            </p>
+
+            <div class="readout" id="readout" role="img" aria-label="Calibration readout">
+              <div class="readout-track">
+                <div class="readout-fill">
+                  <span class="readout-region below"></span>
+                  <span class="readout-region above"></span>
+                </div>
+                <span class="readout-gate">
+                  <span class="readout-gate-label mono" id="gate-label"></span>
+                </span>
+                <span class="readout-naive">
+                  <span class="readout-naive-label">0.50 — not used</span>
+                </span>
+                <span class="readout-marker" id="readout-marker" style="left:0">
+                  <span class="readout-marker-label mono" id="marker-label"></span>
+                  <span class="readout-marker-dot"></span>
+                </span>
+              </div>
+              <div class="readout-scale"><span>0</span><span>1</span></div>
+            </div>
+
+            <p class="note" id="threshold-note"></p>
+            <div class="stats" id="stats"></div>
+            <div class="steps-report" id="steps-report"></div>
+            <p class="note" id="calib-note"></p>
+          </div>
+
+          <div class="card" id="compare-result" hidden aria-live="polite">
+            <div class="panel-head">
+              <span class="panel-eyebrow">Reading — side by side</span>
+            </div>
+
+            <div class="before-after" id="cmp-before-after" hidden>
+              <div class="ba-pane">
+                <span class="ba-label">Before</span>
+                <img id="cmp-ba-before" alt="Original uploaded image" />
+              </div>
+              <div class="ba-pane">
+                <span class="ba-label">After preprocessing</span>
+                <img id="cmp-ba-after" alt="Image after the selected preprocessing steps" />
+              </div>
+            </div>
+
+            <p class="note caveat" id="cmp-off-dist-caveat" hidden>
+              Every model here was trained on <strong>raw</strong> images. With preprocessing
+              applied, both readings below are off-distribution — treat them as
+              <strong>illustrative</strong>; neither is backed by its reported AUC.
+            </p>
+
+            <div class="compare-verdict" id="compare-verdict"></div>
+
+            <div class="compare-columns">
+              <div class="compare-col">
+                <h3 class="compare-col-name" id="cmp-name-a"></h3>
+                <div class="prob mono" id="cmp-prob-a">—</div>
+                <span class="badge provisional" id="cmp-badge-a" hidden>
+                  PROVISIONAL — off-distribution input
+                </span>
+                <div class="flag" id="cmp-flag-a"></div>
+                <div class="readout" id="cmp-readout-a" role="img" aria-label="Calibration readout">
+                  <div class="readout-track">
+                    <div class="readout-fill">
+                      <span class="readout-region below"></span>
+                      <span class="readout-region above"></span>
+                    </div>
+                    <span class="readout-gate">
+                      <span class="readout-gate-label mono" id="cmp-gate-a"></span>
+                    </span>
+                    <span class="readout-naive">
+                      <span class="readout-naive-label">0.50 — not used</span>
+                    </span>
+                    <span class="readout-marker" id="cmp-marker-a" style="left:0">
+                      <span class="readout-marker-label mono" id="cmp-marker-label-a"></span>
+                      <span class="readout-marker-dot"></span>
+                    </span>
+                  </div>
+                  <div class="readout-scale"><span>0</span><span>1</span></div>
+                </div>
+                <p class="note" id="cmp-threshold-note-a"></p>
+                <div class="stats" id="cmp-stats-a"></div>
+              </div>
+
+              <div class="compare-col">
+                <h3 class="compare-col-name" id="cmp-name-b"></h3>
+                <div class="prob mono" id="cmp-prob-b">—</div>
+                <span class="badge provisional" id="cmp-badge-b" hidden>
+                  PROVISIONAL — off-distribution input
+                </span>
+                <div class="flag" id="cmp-flag-b"></div>
+                <div class="readout" id="cmp-readout-b" role="img" aria-label="Calibration readout">
+                  <div class="readout-track">
+                    <div class="readout-fill">
+                      <span class="readout-region below"></span>
+                      <span class="readout-region above"></span>
+                    </div>
+                    <span class="readout-gate">
+                      <span class="readout-gate-label mono" id="cmp-gate-b"></span>
+                    </span>
+                    <span class="readout-naive">
+                      <span class="readout-naive-label">0.50 — not used</span>
+                    </span>
+                    <span class="readout-marker" id="cmp-marker-b" style="left:0">
+                      <span class="readout-marker-label mono" id="cmp-marker-label-b"></span>
+                      <span class="readout-marker-dot"></span>
+                    </span>
+                  </div>
+                  <div class="readout-scale"><span>0</span><span>1</span></div>
+                </div>
+                <p class="note" id="cmp-threshold-note-b"></p>
+                <div class="stats" id="cmp-stats-b"></div>
+              </div>
+            </div>
+
+            <p class="note">
+              Each model's probability is its own <strong>calibrated estimate</strong>, not a
+              diagnosis — shown with its own real error rates, never averaged with the other
+              model's number.
+            </p>
+            <div class="steps-report" id="cmp-steps-report"></div>
+          </div>
+
+          <div class="card">
+            <span class="panel-eyebrow">What does this number mean?</span>
+            <p class="note">
+              The probability shown is the model's <strong>calibrated estimate</strong> that the
+              image resembles melanoma, learned from patterns in training data — it is not a
+              diagnosis, and involves no physical exam or patient history.
+            </p>
+            <p class="note">
+              The referral threshold isn't a 50/50 guess — it's deliberately set low, so the model
+              flags <em>more</em> images for review. That trades lower specificity for higher
+              sensitivity: catching more true melanomas at the cost of more false alarms. The
+              model's own error rates are shown with every reading, so the number is never seen
+              without its limits.
+            </p>
+            <p class="note">
+              Only two models are offered here because only two have a frozen, calibrated
+              operating point. A third architecture trained in this project, EfficientNet-B3,
+              reaches similar raw accuracy but has no <span class="mono">deploy.json</span> — its
+              calibration would need the original HAM10000 validation split, which this demo
+              doesn't have access to. Rather than show an uncalibrated number next to two
+              calibrated ones, it's left out of the comparison entirely.
+            </p>
+            <p class="note">Always see a dermatologist for any real concern about a skin lesion.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <span class="wordmark">Melanoma Classifier</span>
+        <p>
+          A research project on honest evaluation of a melanoma classifier. The number shown is a
+          research model's calibrated estimate, presented with its known error rates — it is not a
+          certified or clinical result. Not a medical device.
+        </p>
+      </div>
+      <div class="footer-nav">
+        <span class="fact-label">On this page</span>
+        <a href="#about">Methodology</a>
+        <a href="#instrument">Instrument</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

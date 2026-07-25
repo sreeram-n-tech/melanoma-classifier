@@ -49,3 +49,9 @@ Thumbs.db
 .vscode/
 .idea/
 .claude/settings.local.json
+
+# ── Local-only docs: not part of the codebase, kept out of the repo ───────
+# Word deliverables (internship report / synopsis / weekly diary) and the
+# third-party literature PDFs live locally but are not pushed.
+reports/
+research papers/

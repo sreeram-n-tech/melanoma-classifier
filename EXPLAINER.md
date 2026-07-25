@@ -6,6 +6,41 @@ is invented or estimated.*
 
 ---
 
+## Before section 0: where this actually started
+
+Before any of the code below existed, this project started as reading, not
+coding. The `research papers/` folder (still in the repo) holds that first
+step: 11 published papers on melanoma detection and dermoscopy image
+preprocessing, collected first —
+
+```
+1-s2.0-S209012322500654X-main.pdf
+372776.pdf
+applsci-16-01819-with-cover.pdf
+diagnostics-12-00344-v4.pdf
+fmed-11-1495576.pdf
+jimaging-11-00107.pdf
+peerj-cs-1953.pdf
+s41598-025-09938-4.pdf
+s41598-025-91446-6.pdf
+s41598-026-44545-x.pdf
+syedmunazirshajahan.pdf
+```
+
+— followed by a literature-survey PPT built from them, in
+`research papers/ppt/`: *"Literature Survey on Image Preprocessing Techniques
+for Melanoma Detection."* That order — papers first, survey second, code
+third — is the actual sequence: read what others had already tried, put the
+survey together, and only then start building. It's also *why* preprocessing
+in this project is not a single fixed step but a set of named, swappable
+modes (`on`, `off`, `color_norm`, `devig`, `devig_ruler` — see §2.3): that
+optionality traces back to the survey weighing multiple preprocessing
+techniques against each other rather than picking one blind.
+
+Everything from here on (§0 onward) is the part that was actually built.
+
+---
+
 ## 0. The one-paragraph version
 
 We built a computer program that looks at a photo of a skin spot and predicts
@@ -538,6 +573,114 @@ failing to break it, learned exactly what the ceiling is made of.
 
 ---
 
+## 8. From model to demo: building the web app
+
+Everything above is the research side — a model trained and honestly measured.
+What follows is what happened next: turning that model into something a person
+can actually point a browser at, upload a photo to, and get an honest reading
+from. It lives in its own folder, `webapp/`, built after the four experiments
+were done. This section, like the rest of the document, is compiled from the
+project's own files (`webapp/README.md`, `app.py`, `inference.py`) — no number
+here is invented either.
+
+### 8.1 The brief, and the tool choice
+
+The ask was a demo: upload an image, pick a model, toggle preprocessing,
+compare. Two frameworks were weighed for building it — **Gradio** (a
+ready-made ML-demo UI library — fast to stand up, but low control over layout
+and wording) versus **FastAPI + Jinja2 + plain JavaScript** (a small Python web
+server rendering real HTML/CSS — slower to build, full control). Because the
+safety language (disclaimers, error rates, the off-distribution caveat below)
+needed exact placement and exact wording, not whatever a template library
+allows, the second option won. No new dataset, no new training — the web app's
+only job is to *serve* the already-trained models faithfully.
+
+The whole thing was built **isolated** from the research code: the two serving
+checkpoints are *copies* dropped into `webapp/models/`, and `model_output/` —
+the real training output — was never touched by any of this.
+
+### 8.2 Not a second scoring system — the same one, reused
+
+The riskiest way to build a demo like this would be to reimplement the scoring
+math by hand and hope it matches. Instead, `webapp/inference.py` **imports and
+reuses** the exact research pipeline: the same `build_model` constructor, the
+same evaluation transform (resize → tensor → ImageNet normalization) and the
+same 4-flip test-time-averaging and temperature-scaling formulas that
+`finalize.py` and `model/dataset.py` already use. Nothing was rewritten from
+scratch; the honest math was carried over, not re-derived.
+
+Each model's **temperature** and **decision threshold** — the two dials
+explained in §4.4 — are read straight from that model's own `deploy.json`,
+never recomputed by the web app. Two models are registered, each fully
+self-contained:
+
+| Model | Temperature | Threshold | TTA |
+|---|---|---|---|
+| EfficientNet-B0 (primary) | 1.893 | 0.194 | on |
+| MobileNetV2 (baseline) | 1.450 | 0.156 | off |
+
+**EfficientNet-B3** — the bigger model from Experiment 3 — is deliberately
+**left out** of the demo. Calibrating it needs the original HAM10000
+validation split fitted the way §4.4 describes, which this demo doesn't have
+access to. Rather than show it with a made-up threshold, the app's explainer
+panel says plainly why it's absent. Leaving a known gap disclosed, instead of
+quietly papering over it, is the same instinct as reporting the four null
+results in §5 instead of hiding them.
+
+A script called `parity_check.py` is the proof the reuse actually worked: it
+re-runs the web app's own inference path over the same held-out test images
+`finalize.py` scored, for every registered model, and checks the resulting
+AUC / sensitivity / specificity against that model's `deploy.json` — expected
+to match within 1e-3. That's the same discipline as the drift guard in §4.6,
+aimed at a different failure mode: not "did a fold behave oddly," but "does the
+serving code actually compute what the research code computed."
+
+### 8.3 The Calibration Readout, and staying honest off-distribution
+
+The interface's signature element is a **Calibration Readout**: a 0→1 bar
+showing the calibrated probability as a marker, the model's own frozen
+threshold as a labeled gate, and the naive 0.5 cutoff as a faint tick marked
+"not used" — visually making the point from §2.4, that the decision line is
+0.194 (or 0.156), never a generic 50%.
+
+The web app also lets a visitor turn on the same real preprocessing steps used
+elsewhere in this project — color normalization, vignette removal, ruler
+masking, hair removal, denoising, contrast enhancement — via
+`preprocessing_bridge.py`, which calls the *actual* functions in
+`preprocessing/preprocess.py`, not a reimplementation. But both registered
+models were trained and calibrated with preprocessing **off** (§2.3). So the
+moment any toggle is switched on, the input the model sees is no longer the
+kind of input it was calibrated for — what §4 would call **off-distribution**.
+The app never hides this: it marks the reading **PROVISIONAL**, hatches the
+readout, and adds an explicit caveat that the number is illustrative, not
+backed by the reported AUC. It's the same rule as §4.4's frozen threshold,
+applied to a new situation — don't show an authoritative-looking number where
+the honesty guarantees no longer hold.
+
+### 8.4 Comparing models, side by side
+
+A later addition lets a visitor run **both** registered models on the same
+image at once. It does not average or combine their answers into one score —
+each model's probability, threshold, and stats stay entirely its own, exactly
+as if requested separately. The only thing added is a single flag: whether the
+two models' own threshold decisions **disagree**. Disagreement is disclosed,
+not resolved by a fake combined verdict.
+
+### 8.5 Where the demo stands now
+
+The app was built in stages — a working skeleton first, then the designed
+interface and safety copy, then the model selector, then the preprocessing
+toggles, then the compare view — and later given a purely visual re-skin (an
+editorial, instrument-panel look) with `parity_check.py` re-run afterward to
+confirm the redesign changed nothing about what number gets shown. It runs
+locally only (`uvicorn webapp.app:app`), reads two real calibrated models, and
+carries every honesty rule from the research side into the interface: the
+probability is never shown without its model's known error rates, the
+threshold is never a naive 50%, and preprocessing that pushes the input
+off-distribution is always disclosed as such.
+
+---
+
 ## Appendix A — Glossary (every term, one line each)
 
 | Term | Plain meaning |
@@ -584,6 +727,10 @@ failing to break it, learned exactly what the ceiling is made of.
 | Learning curve | Plot of accuracy vs. amount of training data. |
 | Diminishing returns | Each extra batch of data helps less than the last. |
 | Asymptote | A level a curve approaches and stops rising past. |
+| deploy.json | The one file per model holding its frozen temperature, threshold, TTA setting, and stats — the single source of truth the web app reads from, never recomputes. |
+| Calibration Readout | The web app's 0→1 bar showing the calibrated probability against the model's own frozen threshold (never a naive 0.5). |
+| Parity check | Re-running the web app's inference path over the same held-out images the research code scored, to confirm the two match — a bug check for the serving code, not a new experiment. |
+| Off-distribution (web app) | Input unlike what a model was trained/calibrated on (e.g. preprocessing a model that was calibrated on raw images) — flagged PROVISIONAL rather than shown as an authoritative number. |
 
 ## Appendix B — Experiment summary table
 
@@ -602,5 +749,8 @@ melanomas apart in a single photo — stated honestly, within the power limits o
 ---
 *EXPLAINER.md — a teaching summary compiled from the project's own reports and
 result files (report.md, report_augment.md, report_backbone.md,
-report_learning_curve.md, and the summary JSONs). No numbers were invented; all
-trace back to those files. No code, model, or data was changed to write this.*
+report_learning_curve.md, and the summary JSONs); for the opening section, from
+the contents of research papers/ and research papers/ppt/; and — for §8 — from
+webapp/README.md, webapp/app.py, and webapp/inference.py. No numbers were
+invented; all trace back to those files. No code, model, or data was changed
+to write this.*

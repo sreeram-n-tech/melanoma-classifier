@@ -1,0 +1,15 @@
+# Serving deps for the melanoma research demo web app.
+# Inference is CPU-only; no GPU required.
+fastapi
+uvicorn[standard]
+jinja2
+python-multipart
+torch
+torchvision
+pillow
+numpy
+# parity_check.py additionally uses (already required by the research repo):
+scikit-learn
+pandas
+# opencv-python is needed from Phase 3 on (preprocessing toggles):
+opencv-python
